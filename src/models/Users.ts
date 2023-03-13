@@ -30,5 +30,4 @@ export interface Name {
 //  redux
 export interface UserState {
     users: User[];
-    // favs: Person[];
 }

@@ -1,15 +1,32 @@
 import ManageAccountsSharpIcon from '@mui/icons-material/ManageAccountsSharp';
 import PersonOffSharpIcon from '@mui/icons-material/PersonOffSharp';
 import { Button, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
-import { useSelector } from 'react-redux';
+import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { User, UserState } from '../../models';
+import { deleteUser, editUser } from '../../redux/states/people';
 import './UserTable.scss';
 
 const UserTable = () => {
-
     // extract redux state for render
-    const reduxUserState = useSelector((state: UserState) => state);
+    const reduxUserState: User[] = useSelector((state: UserState) => state.users);
+    // setting a component local state
+    const [localUserState, setLocalUserState] = useState<User[]>([])
 
+    const dispatch = useDispatch();
+
+    const handleEdit = (userData: User) => {
+        dispatch(editUser(userData));
+    };
+    const handleDelete = (userData: User) => {
+        dispatch(deleteUser(userData));
+    };
+
+    useEffect(() => {
+      setLocalUserState(reduxUserState);
+    }, [reduxUserState, localUserState])
+    
+    
     return (
         <TableContainer className="user-table-container" component={Paper}>
             <Table sx={{ minWidth: 650 }} size="small" aria-label="a dense table">
@@ -24,30 +41,46 @@ const UserTable = () => {
                 </TableRow>
             </TableHead>
             <TableBody>
-                {reduxUserState.users.map((user: User) => (
-                    <TableRow
-                        key={user.id}
-                        sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                    >
-                        <TableCell component="th" scope="row">
-                        {user.name.firstname + user.name.lastname}
-                        </TableCell>
-                        <TableCell align="right">{user.username}</TableCell>
-                        <TableCell align="right">{user.email}</TableCell>
-                        <TableCell align="right">{user.phone}</TableCell>
-                        <TableCell align="right">{'C/ ' + user.address.street + ', ' + user.address.number  + ', ZIP: ' + user.address.zipcode + ', ' + user.address.city}</TableCell>
-                        <TableCell align="right">
-                            <div className="action">
-                                <Button className='action-buttons' variant='contained' endIcon={<ManageAccountsSharpIcon />}>
-                                    Edit User
-                                </Button>
-                                <Button className='action-buttons' color="error" variant='contained' endIcon={<PersonOffSharpIcon />}>
-                                    Delete User
-                                </Button>
-                            </div>
-                        </TableCell>
-                    </TableRow>
-                ))}
+                    {localUserState.map((user: User) => (
+                        <TableRow
+                            key={user.id}
+                            sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                        >
+                            <TableCell component="th" scope="row">
+                            {(user.name.firstname +' '+ user.name.lastname)
+                            .toLowerCase()
+                            .split(' ')
+                            .map(function (word) {
+                                return (word.charAt(0).toUpperCase() + word.slice(1));
+                            }).join(' ')}
+                            </TableCell>
+                            <TableCell align="right">{user.username}</TableCell>
+                            <TableCell align="right">{user.email}</TableCell>
+                            <TableCell align="right">{user.phone}</TableCell>
+                            <TableCell align="right">{'C/ ' + user.address.street + ', ' + user.address.number  + ', ZIP: ' + user.address.zipcode + ', ' + user.address.city}</TableCell>
+                            <TableCell align="right">
+                                <div className="action">
+                                    <Button 
+                                        className='action-buttons' 
+                                        variant='contained' 
+                                        endIcon={<ManageAccountsSharpIcon />}
+                                        onClick={() => handleEdit(user)}
+                                    >
+                                        Edit User
+                                    </Button>
+                                    <Button 
+                                        className='action-buttons' 
+                                        color="error" 
+                                        variant='contained' 
+                                        endIcon={<PersonOffSharpIcon />}
+                                        onClick={() => handleDelete(user)}
+                                    >
+                                        Delete User
+                                    </Button>
+                                </div>
+                            </TableCell>
+                        </TableRow>
+                    ))}
             </TableBody>
             </Table>
         </TableContainer>
