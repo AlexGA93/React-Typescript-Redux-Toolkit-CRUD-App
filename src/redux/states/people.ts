@@ -3,36 +3,43 @@ import { UserState, User } from "../../models";
 import { LocalStorageTypes } from "../../models/localstorage";
 import { getLocalStorage, setLocalStorage } from "../../utilities/localstorage.utility";
 import axios from 'axios';
+import { useDispatch } from "react-redux";
 
-const initialUsersState: UserState = {
-    users: []
-};
-
-
-const getInitialState = () => getLocalStorage(LocalStorageTypes.USERS) 
-? getLocalStorage(LocalStorageTypes.USERS) 
-: initialUsersState.users;
-
+const initialUsersState: User[] = [];
 // redux slice
 export const usersSlice = createSlice({
     name: LocalStorageTypes.USERS,
     initialState: initialUsersState,
     reducers: {
         setUsers: (state, action) => {
-            // store users in localstorage AND update global app state
-            // setLocalStorage(LocalStorageTypes.USERS, action.payload);
 
-            // TODO: state must be updated with action.payload
-            return action.payload;
+            // store in local storage
+            setLocalStorage(LocalStorageTypes.USERS, action.payload);
+
+            // update state with api response
+            return [
+                ...state,
+                ...action.payload
+            ];
         },
         addUser: (state, action) => {
             // state.users.push(action.payload);
         },
         editUser: (state, action) => {
-            // state.users.push(action.payload);
+            console.log(action.payload);
+            
         },
         deleteUser: (state, action) => {
-            // state.users.push(action.payload);
+            console.log(action.payload);
+            const deletedUser = async(id: number) => {
+               return await axios
+               .delete(`http://localhost:8080/users/${id}`)
+               .then((response) => true);
+            }
+            deletedUser(action.payload.id);
+            
+            setUsers([...state]);
+            
         }
     },
 });
