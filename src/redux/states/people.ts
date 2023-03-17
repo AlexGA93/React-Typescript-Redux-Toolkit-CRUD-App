@@ -28,7 +28,10 @@ export const usersSlice = createSlice({
             }
         },
         addUser: (state, action) => {
-            // state.users.push(action.payload);
+
+            console.log(action.payload);
+            
+
             const addNewUser = async(newUser: User) => {
                 return await axios
                .post(`http://localhost:8080/users`, newUser)
@@ -38,7 +41,7 @@ export const usersSlice = createSlice({
 
             };
 
-            addNewUser(action.payload);
+            // addNewUser(action.payload);
         },
         editUser: (state, action) => {
             console.log(action.payload);
