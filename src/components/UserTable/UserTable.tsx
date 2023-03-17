@@ -1,30 +1,42 @@
 import ManageAccountsSharpIcon from '@mui/icons-material/ManageAccountsSharp';
 import PersonOffSharpIcon from '@mui/icons-material/PersonOffSharp';
 import { Button, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { User, UserState } from '../../models';
 import { deleteUser, editUser } from '../../redux/states/people';
 import './UserTable.scss';
 
 const UserTable = () => {
-    // extract redux state for render
-    const reduxUserState: User[] = useSelector((state: UserState) => state.users);
-    // setting a component local state
-    const [localUserState, setLocalUserState] = useState<User[]>([])
 
-    const dispatch = useDispatch();
+    // component will recieve redux state
+    const reduxUsersState = useSelector((state) => state);
+    // console.log(reduxUsersState);
+    
+
+    // extract redux state for render
+    // const reduxUserState: User[] = useSelector((state: UserState) => state.users);
+    // console.log(reduxUserState);
+    
+    // setting a component local state
+    // const [localUserState, setLocalUserState] = useState<User[]>([]);
+
+    // const prevUserState = useRef<User[]>();
+
+    // const dispatch = useDispatch();
 
     const handleEdit = (userData: User) => {
-        dispatch(editUser(userData));
+        // dispatch(editUser(userData));
     };
     const handleDelete = (userData: User) => {
-        dispatch(deleteUser(userData));
+        // dispatch(deleteUser(userData));
     };
 
-    useEffect(() => {
-      setLocalUserState(reduxUserState);
-    }, [reduxUserState, localUserState])
+    // useEffect(() => {
+    //   setLocalUserState(reduxUserState);
+
+    //   prevUserState.current = reduxUserState;
+    // },[prevUserState])
     
     
     return (
@@ -41,7 +53,7 @@ const UserTable = () => {
                 </TableRow>
             </TableHead>
             <TableBody>
-                    {localUserState.map((user: User) => (
+                    {/* {localUserState.map((user: User) => (
                         <TableRow
                             key={user.id}
                             sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
@@ -80,7 +92,7 @@ const UserTable = () => {
                                 </div>
                             </TableCell>
                         </TableRow>
-                    ))}
+                    ))} */}
             </TableBody>
             </Table>
         </TableContainer>
