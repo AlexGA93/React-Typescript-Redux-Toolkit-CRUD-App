@@ -5,7 +5,11 @@ import { getLocalStorage, setLocalStorage } from "../../utilities/localstorage.u
 import axios from 'axios';
 import { useDispatch } from "react-redux";
 
-const initialUsersState: User[] = [];
+// const initialUsersState: User[] = [];
+const initialUsersState: UserState = {
+    users: [],
+    isLoading: true
+}
 // redux slice
 export const usersSlice = createSlice({
     name: LocalStorageTypes.USERS,
@@ -14,23 +18,34 @@ export const usersSlice = createSlice({
         setUsers: (state, action) => {
 
             // store in local storage
-            setLocalStorage(LocalStorageTypes.USERS, action.payload);
+            // setLocalStorage(LocalStorageTypes.USERS, action.payload);
 
             // update state with api response
-            return [
+            return {
                 ...state,
-                ...action.payload
-            ];
+                users: [action.payload],
+                isLoading: false
+            }
         },
         addUser: (state, action) => {
             // state.users.push(action.payload);
+            const addNewUser = async(newUser: User) => {
+                return await axios
+               .post(`http://localhost:8080/users`, newUser)
+               .then((response) => {
+                console.log(response);
+               });
+
+            };
+
+            addNewUser(action.payload);
         },
         editUser: (state, action) => {
             console.log(action.payload);
             
         },
         deleteUser: (state, action) => {
-            console.log(action.payload);
+            // console.log(action.payload);
             const deletedUser = async(id: number) => {
                return await axios
                .delete(`http://localhost:8080/users/${id}`)
@@ -38,7 +53,7 @@ export const usersSlice = createSlice({
             }
             deletedUser(action.payload.id);
             
-            setUsers([...state]);
+            // setUsers([...state]);
             
         }
     },

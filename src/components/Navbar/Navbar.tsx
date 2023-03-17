@@ -4,13 +4,15 @@ import React, { useState } from 'react'
 import { ModalComponent } from '../ModalComponent';
 
 const Navbar = () => {
-
-  const [modalOpened, setModalOpened] = useState<boolean>(false);
+  const [modalIsOpened, setModalIsOpened] = useState<boolean>(false);
 
   const handleOpenModal = () => {
-    setModalOpened(!modalOpened);
+    setModalIsOpened(true);
   };
 
+  const handleCloseModal = () => {
+    setModalIsOpened(false);
+  };
 
   return (
     <AppBar position="fixed" className='navbar-container'>
@@ -28,8 +30,8 @@ const Navbar = () => {
 
         {/* modal component called to change the local state */}
         <ModalComponent 
-          isModalOpened={modalOpened}
-          modalStateHandler={() => setModalOpened(!modalOpened  )}
+          openProp={modalIsOpened}
+          setModalOpen={handleCloseModal}
         />
       </Toolbar>
     </AppBar>
