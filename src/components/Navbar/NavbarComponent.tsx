@@ -6,9 +6,10 @@ import {Navbar} from 'react-bootstrap';
 import Container from 'react-bootstrap/Container';
 import { BootstrapModal } from '../BootstrapModal';
 const NavbarComponent = () => {
-  const [modalIsOpened, setModalIsOpened] = useState<boolean>(false);
 
-  const toggleShow = () => setModalIsOpened(state => !state);
+  const [show, setShow] = useState(false);
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
 
   return (
     <AppBar position="fixed" className='navbar-container'>
@@ -19,7 +20,7 @@ const NavbarComponent = () => {
 
           <IconButton
             color="error" 
-            onClick={ () => setModalIsOpened(true)}
+            onClick={handleShow}
           >
             <PersonAddOutlinedIcon color='action' fontSize="large"/>
           </IconButton >
@@ -30,7 +31,8 @@ const NavbarComponent = () => {
           /> */}
 
           <BootstrapModal
-          show={modalIsOpened} toggleShow={toggleShow}
+            show={show}
+            handleClose={handleClose}
           />
 
         </Toolbar>

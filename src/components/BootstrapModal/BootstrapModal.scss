@@ -2,33 +2,10 @@
 
 .modal-dialog {
     margin-top: 150px;
-    // padding: 5px;
 }
 
 .modal-body{
     display: flex;
     justify-content: center;
     padding: 30px;
-
-    form {
-        .mb-3{
-            .form-label{
-                display: flex;
-                justify-content: center;
-                margin: 15px;
-            }
-
-            .form-group-container{
-                display: flex;
-                flex-direction: row;
-                flex-wrap: wrap;
-                justify-content: center;
-            }
-        
-            .form-control {
-                width: 150px;
-                margin: 5px 15px 5px 15px;
-            }
-        }
-    }
 }
