@@ -29,9 +29,6 @@ export const usersSlice = createSlice({
         },
         addUser: (state, action) => {
 
-            console.log(action.payload);
-            
-
             const addNewUser = async(newUser: User) => {
                 return await axios
                .post(`http://localhost:8080/users`, newUser)

@@ -1,9 +1,6 @@
-import { AppBar, Toolbar, IconButton, Typography, Button } from '@mui/material';
 import PersonAddOutlinedIcon from '@mui/icons-material/PersonAddOutlined';
-import React, { useState } from 'react'
-import { ModalComponent } from '../ModalComponent';
-import {Navbar} from 'react-bootstrap';
-import Container from 'react-bootstrap/Container';
+import { AppBar, IconButton, Toolbar, Typography } from '@mui/material';
+import { useState } from 'react';
 import { BootstrapModal } from '../BootstrapModal';
 const NavbarComponent = () => {
 
@@ -24,12 +21,7 @@ const NavbarComponent = () => {
           >
             <PersonAddOutlinedIcon color='action' fontSize="large"/>
           </IconButton >
-
-          {/* <ModalComponent 
-            openProp={modalIsOpened}
-            setModalOpen={handleCloseModal}
-          /> */}
-
+          
           <BootstrapModal
             show={show}
             handleClose={handleClose}
@@ -45,7 +37,6 @@ const NavbarComponent = () => {
  * 
  * dispatch action when form is filled
  * add new user action
- * form error toast/alert MUI
  */
 
 export default NavbarComponent
