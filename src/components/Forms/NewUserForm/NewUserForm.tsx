@@ -2,32 +2,16 @@ import { useState } from "react";
 import Form from "react-bootstrap/esm/Form";
 import { useDispatch } from "react-redux";
 import { User } from "../../../models";
-import { addUser } from "../../../redux/states/people";
+import { addUser, updateUser } from "../../../redux/states/people";
 import { AppDispatch } from '../../../redux/store';
 import './NewUserForm.scss';
 
 
 
-const NewUserForm = ({setSuccess,setToastMessage,showToastMethod}: any) => {
-  const initialForm: User = {
-    address: {
-      city: "",
-      street: "",
-      number: "",
-      zipcode: "",
-    },
-    email: "",
-    username: "",
-    password: "",
-    name: {
-      firstname: "",
-      lastname: "",
-    },
-    phone: "",
-    "__v":0
-  };
+const NewUserForm = ({setSuccess,setToastMessage,showToastMethod,formInfo,mode}: any) => {
 
-  const [formState, setFormState] = useState<User>(initialForm);
+  const [formState, setFormState] = useState<User>(formInfo);
+  
 
   const dispatch = useDispatch<AppDispatch>();
  
@@ -35,7 +19,7 @@ const NewUserForm = ({setSuccess,setToastMessage,showToastMethod}: any) => {
   const handleSubmit = (e: any) => {
     e.preventDefault();
     
-    if(JSON.stringify(formState) === JSON.stringify(initialForm)){
+    if(JSON.stringify(formState) === JSON.stringify(formInfo)){
 
       setSuccess('danger');
       setToastMessage('Please type user information at least!');
@@ -43,10 +27,15 @@ const NewUserForm = ({setSuccess,setToastMessage,showToastMethod}: any) => {
       setSuccess('success');
       setToastMessage('New User Added!!');
     }
-    
-    // dispatch redux action
-    dispatch(addUser(formState));
 
+    if(mode === 'Edit'){
+      // dispatch redux action
+      dispatch(updateUser(formState));
+    }else if(mode === 'Add'){
+      // dispatch redux action
+      dispatch(addUser(formState));
+    }
+    
     // toast message
     showToastMethod(true);
   };
