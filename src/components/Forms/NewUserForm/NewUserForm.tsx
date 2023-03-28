@@ -3,31 +3,33 @@ import Form from "react-bootstrap/esm/Form";
 import { useDispatch } from "react-redux";
 import { User } from "../../../models";
 import { addUser } from "../../../redux/states/people";
+import { AppDispatch } from '../../../redux/store';
 import './NewUserForm.scss';
 
 
 
 const NewUserForm = ({setSuccess,setToastMessage,showToastMethod}: any) => {
   const initialForm: User = {
-    name: {
-      firstname: "",
-      lastname: "",
-    },
-    username: "",
-    email: "",
-    password: "",
-    phone: "",
     address: {
       city: "",
       street: "",
       number: "",
       zipcode: "",
     },
+    email: "",
+    username: "",
+    password: "",
+    name: {
+      firstname: "",
+      lastname: "",
+    },
+    phone: "",
+    "__v":0
   };
 
   const [formState, setFormState] = useState<User>(initialForm);
 
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
  
 
   const handleSubmit = (e: any) => {
@@ -42,15 +44,11 @@ const NewUserForm = ({setSuccess,setToastMessage,showToastMethod}: any) => {
       setToastMessage('New User Added!!');
     }
     
-
     // dispatch redux action
     dispatch(addUser(formState));
 
     // toast message
     showToastMethod(true);
-
-    // form with default values
-    // setFormState(initialForm);
   };
 
   return (
