@@ -1,65 +1,82 @@
-import { createAsyncThunk, createSlice, Dispatch, PayloadAction } from "@reduxjs/toolkit";
-import { UserState, User } from "../../models";
-import { LocalStorageTypes } from "../../models/localstorage";
-import { getLocalStorage, setLocalStorage } from "../../utilities/localstorage.utility";
+import { createAsyncThunk, createSlice, Dispatch, PayloadAction  } from "@reduxjs/toolkit";
 import axios from 'axios';
-import { useDispatch } from "react-redux";
+import { User, UserState } from "../../models";
+import { LocalStorageTypes } from "../../models/localstorage";
 
 // const initialUsersState: User[] = [];
 const initialUsersState: UserState = {
-    users: [],
-    isLoading: true
+    usersContent: [],
+    isLoading: true,
+    errs: null
 }
+
+// https://github.com/arturfil/yt_reduxtk_frontend/blob/main/src/features/games/gameSlice.ts
+
+export const getUsers = createAsyncThunk<User[]>(
+    "users/getUsers",
+    async(_, thunkAPI) => {
+        try {
+            const usersAsResponse = await axios.get("http://localhost:8080/users");
+            
+            return usersAsResponse.data;
+        } catch (error) {
+            return thunkAPI.rejectWithValue(error);
+        }
+    }
+);
+
+export const addUser = createAsyncThunk<User, Object>(
+    "users/addUser",
+    async (userData, thunkAPI) => {
+        // console.log(userData);
+        
+        try {
+            const userAsResponse = await axios.post('http://localhost:8080/users', userData);
+
+            thunkAPI.dispatch(getUsers());
+
+            return userAsResponse.data;
+
+        } catch (error) {
+            return thunkAPI.rejectWithValue(error);
+        }
+    }
+);
+
+export const deleteUser = createAsyncThunk<User, number>(
+    "users/deleteUser",
+    async (userId, thunkAPI) => {
+        try {
+            const eObjectAsResponse = await axios.delete(`http://localhost:8080/users/${userId}`);
+
+            thunkAPI.dispatch(getUsers());
+
+            return eObjectAsResponse.data;
+
+        } catch (error) {
+            return thunkAPI.rejectWithValue(error);
+        }
+    }
+);
+
 // redux slice
 export const usersSlice = createSlice({
     name: LocalStorageTypes.USERS,
     initialState: initialUsersState,
-    reducers: {
-        setUsers: (state, action) => {
-
-            // store in local storage
-            // setLocalStorage(LocalStorageTypes.USERS, action.payload);
-
-            // update state with api response
-            return {
-                ...state,
-                users: [action.payload],
-                isLoading: false
-            }
-        },
-        addUser: (state, action) => {
-
-            const addNewUser = async(newUser: User) => {
-                return await axios
-               .post(`http://localhost:8080/users`, newUser)
-               .then((response) => {
-                console.log(response);
-               });
-
-            };
-
-            // addNewUser(action.payload);
-        },
-        editUser: (state, action) => {
-            console.log(action.payload);
-            
-        },
-        deleteUser: (state, action) => {
-            // console.log(action.payload);
-            const deletedUser = async(id: number) => {
-               return await axios
-               .delete(`http://localhost:8080/users/${id}`)
-               .then((response) => true);
-            }
-            deletedUser(action.payload.id);
-            
-            // setUsers([...state]);
-            
-        }
-    },
+    reducers: {},
+    extraReducers: (builder) => {
+        builder.addCase(getUsers.pending, (state) => {
+            state.isLoading = true;
+        })
+        builder.addCase(getUsers.fulfilled, (state, action) => {
+            state.isLoading = false;
+            state.usersContent = action.payload
+        })
+        builder.addCase(getUsers.rejected, (state, action) => {
+            state.isLoading = false;
+            state.errs = action.payload
+        })
+    }
 });
 
-
-// Action creators are generated for each case reducer function
-export const { setUsers, addUser, editUser, deleteUser } = usersSlice.actions;
 export default usersSlice.reducer;

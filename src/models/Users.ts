@@ -1,3 +1,15 @@
+export interface ReduxStore{
+    users: UserState;
+    // favs
+}
+
+//  redux user state
+export interface UserState {
+    usersContent: User[];
+    isLoading: boolean;
+    errs: any
+}
+
 export interface User {
     address:  Address;
     id?:       number;
@@ -10,16 +22,10 @@ export interface User {
 }
 
 export interface Address {
-    geolocation?: Geolocation;
     city:        string;
     street:      string;
     number:      string;
     zipcode:     string;
-}
-
-export interface Geolocation {
-    lat?:  string;
-    long?: string;
 }
 
 export interface Name {
@@ -27,8 +33,9 @@ export interface Name {
     lastname:  string;
 }
 
-//  redux
-export interface UserState {
-    users: User[];
-    isLoading: boolean;
-}
+
+
+
+
+
+

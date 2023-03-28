@@ -8,7 +8,7 @@ import { User, ModalProps } from "../../models";
 import "./ModalComponent.scss";
 import AccountCircleTwoToneIcon from "@mui/icons-material/AccountCircleTwoTone";
 import { useDispatch } from "react-redux";
-import { addUser } from "../../redux/states/people";
+// import { addUser } from "../../redux/states/people";
 
 const style = {
   color: "#252525",
@@ -54,7 +54,7 @@ const ModalComponent = ({ openProp, setModalOpen }: ModalProps) => {
     console.log(formState);
 
     // dispatch redux action
-    dispatch(addUser(formState));
+    // dispatch(addUser(formState));
 
     // form with default values
     setFormState(initialForm);

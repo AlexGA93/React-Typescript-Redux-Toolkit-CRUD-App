@@ -32,11 +32,4 @@ const NavbarComponent = () => {
   )
 }
 
-/**
- * TODO:
- * 
- * dispatch action when form is filled
- * add new user action
- */
-
 export default NavbarComponent
