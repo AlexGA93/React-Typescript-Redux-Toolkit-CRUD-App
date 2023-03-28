@@ -1,11 +1,17 @@
 import { useState } from "react";
 import { Button } from "react-bootstrap";
 import Modal from "react-bootstrap/Modal";
+import { User } from "../../models";
 import { NewUserForm } from "../Forms";
 import { ToastComponent } from "../Toast";
 import "./BootstrapModal.scss";
 
-const BootstrapModal = ({ show, handleClose }: any) => {
+
+
+const BootstrapModal = ({ show, handleClose, formInfo, mode }: any) => {
+
+  // console.log(formInfo);
+  
 
   const [showToast, setShowToast] = useState<boolean>(false);
 
@@ -19,13 +25,15 @@ const BootstrapModal = ({ show, handleClose }: any) => {
     <>
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
-          <Modal.Title>Add a new user</Modal.Title>
+          <Modal.Title>{mode} a new user</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <NewUserForm
             setSuccess={setSuccess}
             setToastMessage={setToastMessage}
             showToastMethod={showToastMethod}
+            formInfo={formInfo}
+            mode={mode}
           />
         </Modal.Body>
         <Modal.Footer>
